@@ -66,6 +66,63 @@ class User(db.Model):
 
         return False
 
+
+class Product(db.Model):
+  '''Products'''
+
+   __tablename__ = 'products'
+
+   id = db.Column(
+       db.Integer,
+       primary_key=True,
+   )
+
+   name = db.Column(
+        db.Text,
+        nullable=False
+   )
+
+   price = db.Column(
+        db.Float,
+        nullable=False
+   )
+
+   caliber = db.Column(
+        db.Text,
+        nullable=False
+   )
+
+   grain = db.Column(
+        db.Integer,
+        nullable=False
+   )
+
+   bullet = db.Column(
+        db.Text,
+        nullable=False
+   )
+
+   casing = db.Column(
+        db.Text,
+        nullable=False
+   )
+
+   manufacturer = db.Column(
+        db.Text,
+        nullable=False
+   )
+
+   qty_per_box = db.Column(
+        db.Integer,
+        nullable=False
+   )
+
+   box_qty_on_hand = db.Column(
+        db.Integer,
+        nullable=False
+   )
+
+
 def connect_db(app):
     """Connect this database to provided Flask app.
 

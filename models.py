@@ -82,6 +82,10 @@ class Product(db.Model):
         nullable=False
     )
 
+    image = db.Column(
+        db.Text
+    )
+
     price = db.Column(
         db.Float,
         nullable=False

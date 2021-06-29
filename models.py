@@ -73,8 +73,8 @@ class Product(db.Model):
    __tablename__ = 'products'
 
    id = db.Column(
-       db.Integer,
-       primary_key=True,
+        db.Integer,
+        primary_key=True,
    )
 
    name = db.Column(
@@ -122,6 +122,38 @@ class Product(db.Model):
         nullable=False
    )
 
+class Order(db.Model):
+    '''Orders'''
+
+    __tablename__ = 'orders'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    user = db.relationship('User', backrefs='orders')
+
+    products = db.relationship('Product', secondary='orders_products')
+
+class OrderProduct(db.Model):
+    '''Orders to Products'''
+
+    __tablename__ = 'orders_products'
+
+    order_id = db.Column(
+        db.Integer,
+        db.ForeignKey('orders.id', ondelete='cascade'),
+        nullable=False,
+        primary_key=True
+    )
+
+    product_id = db.Column(
+        db.Integer,
+        db.ForeignKey('products.id', ondelete='cascade')
+        nullable=False,
+        primary_key=True
+    )
 
 def connect_db(app):
     """Connect this database to provided Flask app.

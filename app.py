@@ -1,7 +1,6 @@
 from flask import Flask
-from sqlalchemy
-
-from models import connect_db()
+from models import db, connect_db
+import os
 
 app = Flask(__name__)
 

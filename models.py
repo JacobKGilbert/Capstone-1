@@ -68,59 +68,59 @@ class User(db.Model):
 
 
 class Product(db.Model):
-  '''Products'''
+    '''Products'''
 
-   __tablename__ = 'products'
+    __tablename__ = 'products'
 
-   id = db.Column(
+    id = db.Column(
         db.Integer,
         primary_key=True,
-   )
+    )
 
-   name = db.Column(
+    name = db.Column(
         db.Text,
         nullable=False
-   )
+    )
 
-   price = db.Column(
+    price = db.Column(
         db.Float,
         nullable=False
-   )
+    )
 
-   caliber = db.Column(
+    caliber = db.Column(
         db.Text,
         nullable=False
-   )
+    )
 
-   grain = db.Column(
+    grain = db.Column(
         db.Integer,
         nullable=False
-   )
+    )
 
-   bullet = db.Column(
+    bullet = db.Column(
         db.Text,
         nullable=False
-   )
+    )
 
-   casing = db.Column(
+    casing = db.Column(
         db.Text,
         nullable=False
-   )
+    )
 
-   manufacturer = db.Column(
+    manufacturer = db.Column(
         db.Text,
         nullable=False
-   )
+    )
 
-   qty_per_box = db.Column(
+    qty_per_box = db.Column(
         db.Integer,
         nullable=False
-   )
+    )
 
-   box_qty_on_hand = db.Column(
+    box_qty_on_hand = db.Column(
         db.Integer,
         nullable=False
-   )
+    )
 
 class Order(db.Model):
     '''Orders'''
@@ -132,7 +132,7 @@ class Order(db.Model):
         primary_key=True
     )
 
-    user = db.relationship('User', backrefs='orders')
+    user = db.relationship('User', backref='orders')
 
     products = db.relationship('Product', secondary='orders_products')
 
@@ -150,7 +150,7 @@ class OrderProduct(db.Model):
 
     product_id = db.Column(
         db.Integer,
-        db.ForeignKey('products.id', ondelete='cascade')
+        db.ForeignKey('products.id', ondelete='cascade'),
         nullable=False,
         primary_key=True
     )

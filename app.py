@@ -1,14 +1,19 @@
 from flask import Flask, render_template, request
 from models import db, connect_db
 from forms import LoginSignupForm
+from dotenv import load_dotenv
+from flask_talisman import Talisman
+
 import os
 
 app = Flask(__name__)
-
+Talisman(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgres:///ammo_surplus'))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
+
+# load_dotenv()
 
 connect_db(app)
 

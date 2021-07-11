@@ -1,6 +1,6 @@
 // Pulled from the Square Web SDK
-APPLICATION_ID = 'sandbox-sq0idb-nmDwaVz9m2bkzGGK_dQJsg'
-LOCATION_ID = 'LXD3BVFHEVCS0'
+const APPLICATION_ID = 'sandbox-sq0idb-nmDwaVz9m2bkzGGK_dQJsg'
+const LOCATION_ID = 'LXD3BVFHEVCS0'
 
 async function main() {
   const payments = Square.payments(APPLICATION_ID, LOCATION_ID)

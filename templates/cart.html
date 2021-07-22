@@ -1,4 +1,4 @@
-{% extends 'home.html' %}
+{% extends 'products.html' %}
 
 {% block cart %}
 
@@ -10,6 +10,8 @@
     <div class="card-body">
       <h5 class="card-title">Oops... There's nothing in your cart.</h5>
       <p class="card-text">Please add items to your cart from the selection on the left.</p>
+
+      <p>Cart Total: $<span id="amount-total">0.00</span></p>
       
       <form id="payment-form">
       

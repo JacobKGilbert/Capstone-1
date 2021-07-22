@@ -1,41 +1,110 @@
-from flask import Flask, render_template, request
-from models import db, connect_db
+from flask import Flask, render_template, redirect, request, flash, session, g
+from models import db, connect_db, User, Product, Order, OrderProduct
 from forms import LoginSignupForm
+from sqlalchemy.exc import IntegrityError
 from dotenv import load_dotenv
-from flask_talisman import Talisman
+from payments import make_payment
 
 import os
 
 app = Flask(__name__)
-Talisman(app)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = (
-    os.environ.get('DATABASE_URL', 'postgres:///ammo_surplus'))
+    os.environ.get('DATABASE_URL', 'postgresql:///ammo_surplus'))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "Acts2:38")
 
-# load_dotenv()
+load_dotenv()
 
 connect_db(app)
+
+CURR_USER = 'current user'
+
+@app.before_request
+def add_user_to_g():
+    """If we're logged in, add curr user to Flask global."""
+
+    if CURR_USER in session:
+        g.user = User.query.get(session[CURR_USER])
+
+    else:
+        g.user = None
+
+
+def do_login(user):
+    """Log in user."""
+
+    session[CURR_USER] = user.id
+
+
+def do_logout():
+    """Logout user."""
+
+    if CURR_USER in session:
+        del session[CURR_USER]
+
 
 @app.route('/')
 def home():
     '''Get the home template.'''
+    products = Product.query.all()
+    APPLICATION_ID = os.environ.get('APPLICATION_ID')
+    LOCATION_ID = os.environ.get('LOCATION_ID')
+
+    return render_template('home.html', products=products, APPLICATION_ID=APPLICATION_ID, LOCATION_ID=LOCATION_ID)
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    '''Handle Login'''
+    req = request.get_json()
+
+    form = LoginSignupForm(obj=req, meta={'csrf': False})
+    if request.method == 'POST' and form.validate():
+        user = User.authenticate(form.email.data,
+                                 form.password.data)
+
+        if user:
+            do_login(user)
+            flash(f"Welcome!", "success")
+            return redirect("/")
+
+        flash("Invalid credentials.", 'danger')
     
-    return render_template('cart.html')
+    return redirect('/')
+
+@app.route('/register', methods=['POST'])
+def register():
+    '''Handle registering new account.'''
+    req = request.get_json()
+
+    form = LoginSignupForm(obj=req, meta={'csrf': False})
+    if request.method == 'POST' and form.validate():
+        try:
+            user = User.signup(
+                email=form.email.data,
+                password=form.password.data
+            )
+            db.session.commit()
+
+        except IntegrityError:
+            flash("Email already taken", 'danger')
+            return render_template('cart.html')
+
+        do_login(user)
+
+        return redirect("/")
+
+app.route('/payment', methods=['POST'])
+def payment():
+    req = request.get_json()
+    token = req['token']
+    amount = req['amount']
 
 
-# @app.route('/login', methods=['POST'])
-# def login():
-#     '''Handle Login'''
-#     req = request.get_json()
-
-#     form = ValidateForm(obj=req, meta={'csrf': False})
-#     if request.method == 'POST' and form.validate():
+    make_payment(token, amount)
 
 
-
-# @app.route('/register', methods=['POST'])
-# def register():
-#     '''Handle registering new account.'''
-
-
+if __name__ == '__main__':
+    app.run(ssl_context='adhoc')

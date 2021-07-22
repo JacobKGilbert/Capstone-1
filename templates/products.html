@@ -1,0 +1,95 @@
+{% extends 'nav.html' %}
+
+{% block products %}
+{% for category, message in get_flashed_messages(with_categories=True) %}
+<div class="alert alert-{{ category }}">{{ message }}</div>
+{% endfor %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9">
+      <div class="row row-cols-1 row-cols-md-2 g-4">
+
+        {% for product in products %}
+        <div class="col">
+          <div class="card mb-3 product-card h-100 
+            {% if product.box_qty_on_hand == 0 %}
+              border-danger
+            {% endif %}
+          ">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="{{product.image}}" class="img-fluid rounded-start" alt="Image for {{product.manufacturer}} {{product.caliber}}">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body
+                  {% if product.box_qty_on_hand == 0 %}
+                    text-danger
+                  {% endif %}
+                ">
+                  <h6 class="card-title" id="product-id{{product.id}}">{{product.manufacturer}} - {{product.caliber}} - 
+                    {% if product.grain %}
+                      {{product.grain}} grain {{product.bullet_acronym}}
+                    {% else %}
+                      {{product.load}}
+                    {% endif %}
+                  </h6>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Quantity: {{product.qty_per_box}} Rounds/Box
+                      {% if product.boxes_per_case %}
+                        - {{product.boxes_per_case}} Box(es)/Case
+                      {% endif %}
+                    </li>
+                    <li class="list-group-item">
+                      {% if product.bullet_ext %}
+                        Bullet: {{product.bullet_ext|replace("_", " ")}}
+                      {% elif product.load %}
+                        Load: {{product.load}}
+                      {% endif %}
+                    </li>
+                    {% if product.casing %}
+                    <li class="list-group-item">
+                      Casing: {{product.casing|replace("-", " ")}}
+                    </li>
+                    {% endif %}
+                    <li class="list-group-item">Price: ${{product.price}}/box</li>
+                  </ul>
+                  <div class="card-footer">
+                    <form action="#" class="product-form" id="{{product.id}}">
+                      <div class="input-group">
+                        <label for="amount" hidden>Quantity</label>
+                        <input type="number" name="quantity" class="quantity form-control form-control-sm" 
+                        {% if product.box_qty_on_hand < 10 and product.box_qty_on_hand > 0 %}
+                          max="{{product.box_qty_on_hand}}"
+                        {% else %}
+                          max="10" 
+                        {% endif %}
+                        min="1">
+                        <button class="btn btn-outline-success add-cart-btn" type="button"
+                        {% if product.box_qty_on_hand == 0 %}
+                        disabled
+                        {% endif %}
+                        >Add to Cart</button>
+                      </div>
+                    </form>
+                    <sub>Max quantity is 10</sub>
+                    <br>
+                    <sub>Quantity on hand: {{product.box_qty_on_hand}} boxes</sub>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+
+    {% block cart %}
+    {% endblock %}
+
+  </div>
+</div>
+
+{% endblock %}

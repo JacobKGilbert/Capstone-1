@@ -5,3 +5,11 @@ body {
 .cart {
   top: 5rem;
 }
+
+.product-card {
+  max-width: 450px;
+}
+
+.list-group-item {
+  font-size: small;
+}

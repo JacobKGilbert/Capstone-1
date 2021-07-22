@@ -77,53 +77,57 @@ class Product(db.Model):
         primary_key=True,
     )
 
-    name = db.Column(
-        db.Text,
-        nullable=False
-    )
-
     image = db.Column(
-        db.Text
+        db.Text,
     )
 
     price = db.Column(
-        db.Float,
-        nullable=False
+        db.Float(2),
+        nullable=False,
     )
 
     caliber = db.Column(
         db.Text,
-        nullable=False
+        nullable=False,
     )
 
     grain = db.Column(
         db.Integer,
-        nullable=False
     )
 
-    bullet = db.Column(
+    load = db.Column(
         db.Text,
-        nullable=False
+    )
+
+    bullet_acronym = db.Column(
+        db.Text,
+    )
+
+    bullet_ext = db.Column(
+        db.Text,
     )
 
     casing = db.Column(
         db.Text,
-        nullable=False
     )
 
     manufacturer = db.Column(
         db.Text,
-        nullable=False
+        nullable=False,
     )
 
     qty_per_box = db.Column(
         db.Integer,
-        nullable=False
+        nullable=False,
+    )
+
+    boxes_per_case = db.Column(
+        db.Integer,
     )
 
     box_qty_on_hand = db.Column(
         db.Integer,
-        nullable=False
+        nullable=False,
     )
 
 class Order(db.Model):
@@ -136,9 +140,28 @@ class Order(db.Model):
         primary_key=True
     )
 
-    user = db.relationship('User', backref='orders')
+    user = db.relationship('User', secondary='orders_users')
 
     products = db.relationship('Product', secondary='orders_products')
+
+class OrderUser(db.Model):
+    '''Orders to Users'''
+
+    __tablename__ = 'orders_users'
+
+    order_id = db.Column(
+        db.Integer,
+        db.ForeignKey('orders.id', ondelete='cascade'),
+        nullable=False,
+        primary_key=True
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete='cascade'),
+        nullable=False,
+        primary_key=True
+    )
 
 class OrderProduct(db.Model):
     '''Orders to Products'''

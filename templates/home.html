@@ -1,41 +1,4 @@
-{% extends 'nav.html' %}
+{% extends 'cart.html' %}
 
 {% block home %}
-<div class="container">
-  <div class="row">
-    <div class="col-sm-9">
-      <div class="row row-cols-1 row-cols-md-2 g-4">
-        <div class="col">
-          <div class="card mb-3" style="max-width: 450px;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="..." class="img-fluid rounded-start" alt="...">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
-                    content.
-                    This content is a little bit longer.</p>
-                  <form action="#">
-                    <div class="input-group mb-3">
-                      <label for="amount" hidden>Quantity</label>
-                      <input type="number" name="quantity" class="quantity form-control form-control-sm">
-                      <button class="btn btn-outline-success add-cart-btn" type="button">Add to Cart</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    {% block cart %}
-    {% endblock %}
-
-  </div>
-</div>
-
 {% endblock %}

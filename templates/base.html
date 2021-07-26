@@ -41,7 +41,7 @@
       async function eventHandler(event) {
         event.preventDefault();
 
-        let amount = parseInt($('#amount-total').text())
+        let amount = parseFloat($('#amount-total').text())
 
         try {
           const result = await card.tokenize();

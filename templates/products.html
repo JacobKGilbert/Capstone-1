@@ -53,13 +53,13 @@
                       Casing: {{product.casing|replace("-", " ")}}
                     </li>
                     {% endif %}
-                    <li class="list-group-item">Price: ${{product.price}}/box</li>
+                    <li class="list-group-item">Price: $<span id="product-price{{product.id}}">{{product.price}}</span>/box</li>
                   </ul>
                   <div class="card-footer">
                     <form action="#" class="product-form" id="{{product.id}}">
-                      <div class="input-group">
+                      <div class="input-group input-group-sm">
                         <label for="quantity" hidden>Quantity</label>
-                        <input type="number" name="quantity" class="quantity form-control form-control-sm" 
+                        <input type="number" name="quantity" class="quantity form-control" 
                           {% if product.box_qty_on_hand < 10 and product.box_qty_on_hand > 0 -%}
                             max="{{product.box_qty_on_hand}}"
                           {% else %}

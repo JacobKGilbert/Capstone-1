@@ -12,8 +12,8 @@
 
         {% for product in products %}
         <div class="col">
-          <div class="card mb-3 product-card h-100 
-            {% if product.box_qty_on_hand == 0 %}
+          <div class="card product-card mb-3 h-100 
+            {% if product.box_qty_on_hand == 0 -%}
               border-danger
             {% endif %}
           ">
@@ -27,7 +27,8 @@
                     text-danger
                   {% endif %}
                 ">
-                  <h6 class="card-title" id="product-id{{product.id}}">{{product.manufacturer}} - {{product.caliber}} - 
+                  <h6 class="card-title" id="product-id{{product.id}}">
+                    {{product.manufacturer}} - {{product.caliber}} - 
                     {% if product.grain %}
                       {{product.grain}} grain {{product.bullet_acronym}}
                     {% else %}
@@ -57,18 +58,18 @@
                   <div class="card-footer">
                     <form action="#" class="product-form" id="{{product.id}}">
                       <div class="input-group">
-                        <label for="amount" hidden>Quantity</label>
+                        <label for="quantity" hidden>Quantity</label>
                         <input type="number" name="quantity" class="quantity form-control form-control-sm" 
-                        {% if product.box_qty_on_hand < 10 and product.box_qty_on_hand > 0 %}
-                          max="{{product.box_qty_on_hand}}"
-                        {% else %}
-                          max="10" 
-                        {% endif %}
-                        min="1">
-                        <button class="btn btn-outline-success add-cart-btn" type="button"
-                        {% if product.box_qty_on_hand == 0 %}
-                        disabled
-                        {% endif %}
+                          {% if product.box_qty_on_hand < 10 and product.box_qty_on_hand > 0 -%}
+                            max="{{product.box_qty_on_hand}}"
+                          {% else %}
+                            max="10" 
+                          {% endif %}
+                        min="1" required>
+                        <button class="btn btn-outline-success add-cart-btn" type="submit"
+                          {% if product.box_qty_on_hand == 0 -%}
+                          disabled
+                          {% endif %}
                         >Add to Cart</button>
                       </div>
                     </form>

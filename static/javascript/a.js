@@ -14,16 +14,12 @@ function changeTotalPayment() {
 
   totalElement.text(totalAmount)
   if (totalAmount === 0) {
-    toggleEmptyCartMessage()
+    $('.empty-cart-message').show()
   }
 }
 
 function showOrHideProductFromCatalog(product) {
   $(product).toggle()
-}
-
-function toggleEmptyCartMessage() {
-  $('.empty-cart-message').toggle()
 }
 
 function removeProductFromCart(cartProduct) {
@@ -76,7 +72,7 @@ function addProductToCart(productID, quantity, price) {
   changeTotalPayment()
 
   /**  Submit trigger on the product card in cart to remove from cart and add to catalog if quantity is reduced to zero. Else it will call updateCart*/
-  $('.cart-item-form').submit(function (evt) {
+  $(`#item-id${productID} form`).submit(function (evt) {
     evt.preventDefault()
 
     form = evt.currentTarget
@@ -108,11 +104,8 @@ $('.product-form').submit(function (evt) {
   price = parseFloat($(`#product-price${productID}`).text())
   product = form.closest('.col')
 
-  toggleEmptyCartMessage()
+  $('.empty-cart-message').hide()
   addProductToCart(productID, quantity, price)
   $(form)[0].reset()
   showOrHideProductFromCatalog(product)
 })
-
-/* Login/Signup Functionality */
-

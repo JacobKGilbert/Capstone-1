@@ -5,66 +5,66 @@ bcrypt = Bcrypt()
 db = SQLAlchemy()
 
 
-class User(db.Model):
-    """User in the system."""
+# class User(db.Model):
+#     """User in the system."""
 
-    __tablename__ = 'users'
+#     __tablename__ = 'users'
 
-    id = db.Column(
-        db.Integer,
-        primary_key=True,
-    )
+#     id = db.Column(
+#         db.Integer,
+#         primary_key=True,
+#     )
 
-    email = db.Column(
-        db.Text,
-        nullable=False,
-        unique=True,
-    )
+#     email = db.Column(
+#         db.Text,
+#         nullable=False,
+#         unique=True,
+#     )
 
-    password = db.Column(
-        db.Text,
-        nullable=False,
-    )
+#     password = db.Column(
+#         db.Text,
+#         nullable=False,
+#     )
 
-    def __repr__(self):
-        return f"<User #{self.id}: {self.email}>"
+#     def __repr__(self):
+#         return f"<User #{self.id}: {self.email}>"
 
-    @classmethod
-    def signup(cls, email, password):
-        """Sign up user.
+#     @classmethod
+#     def signup(cls, email, password):
+#         """Sign up user.
 
-        Hashes password and adds user to system.
-        """
+#         Hashes password and adds user to system.
+#         """
 
-        hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
+#         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
 
-        user = User(
-            email=email,
-            password=hashed_pwd,
-        )
+#         user = User(
+#             email=email,
+#             password=hashed_pwd,
+#         )
 
-        db.session.add(user)
-        return user
+#         db.session.add(user)
+#         return user
 
-    @classmethod
-    def authenticate(cls, email, password):
-        """Find user with `username` and `password`.
+#     @classmethod
+#     def authenticate(cls, email, password):
+#         """Find user with `username` and `password`.
 
-        This is a class method (call it on the class, not an individual user.)
-        It searches for a user whose password hash matches this password
-        and, if it finds such a user, returns that user object.
+#         This is a class method (call it on the class, not an individual user.)
+#         It searches for a user whose password hash matches this password
+#         and, if it finds such a user, returns that user object.
 
-        If can't find matching user (or if password is wrong), returns False.
-        """
+#         If can't find matching user (or if password is wrong), returns False.
+#         """
 
-        user = cls.query.filter_by(email=email).first()
+#         user = cls.query.filter_by(email=email).first()
 
-        if user:
-            is_auth = bcrypt.check_password_hash(user.password, password)
-            if is_auth:
-                return user
+#         if user:
+#             is_auth = bcrypt.check_password_hash(user.password, password)
+#             if is_auth:
+#                 return user
 
-        return False
+#         return False
 
 
 class Product(db.Model):
@@ -140,28 +140,28 @@ class Order(db.Model):
         primary_key=True
     )
 
-    user = db.relationship('User', secondary='orders_users')
+    # user = db.relationship('User', secondary='orders_users')
 
     products = db.relationship('Product', secondary='orders_products')
 
-class OrderUser(db.Model):
-    '''Orders to Users'''
+# class OrderUser(db.Model):
+#     '''Orders to Users'''
 
-    __tablename__ = 'orders_users'
+#     __tablename__ = 'orders_users'
 
-    order_id = db.Column(
-        db.Integer,
-        db.ForeignKey('orders.id', ondelete='cascade'),
-        nullable=False,
-        primary_key=True
-    )
+#     order_id = db.Column(
+#         db.Integer,
+#         db.ForeignKey('orders.id', ondelete='cascade'),
+#         nullable=False,
+#         primary_key=True
+#     )
 
-    user_id = db.Column(
-        db.Integer,
-        db.ForeignKey('users.id', ondelete='cascade'),
-        nullable=False,
-        primary_key=True
-    )
+#     user_id = db.Column(
+#         db.Integer,
+#         db.ForeignKey('users.id', ondelete='cascade'),
+#         nullable=False,
+#         primary_key=True
+#     )
 
 class OrderProduct(db.Model):
     '''Orders to Products'''

@@ -2,7 +2,8 @@
 
 from csv import DictReader
 from app import app, db
-from models import Product, User, Order, OrderProduct
+# To add login/signup functionality import User (uncommented in models)
+from models import Product, Order, OrderProduct
 
 db.drop_all()
 db.create_all()

@@ -11,31 +11,31 @@
     <div class="collapse navbar-collapse d-flex flex-row-reverse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <!-- Login/Sign Up Form -->
-        <div class="nav-item dropdown">
+        <!-- <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">Login</a>
+            data-bs-toggle="dropdown" aria-expanded="false">Login/Sign Up</a>
           <div class="dropdown-menu dropdown-menu-end">
-            <form class="px-2 py-3" method="POST" action="/login">
-              <!-- Email Input -->
+            <form id="login-signup-form" class="px-2 py-3" method="POST" action="/login">
+              Email Input
               <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="email@example.com">
               </div>
-              <!-- Password Input -->
+              Password Input
               <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password">
               </div>
-              <!-- Submit Button -->
-              <button type="submit" class="btn btn-primary">Login</button>
+              Submit Button
+              <button type="submit" class="btn btn-primary" >Login</button>
             </form>
 
             <div class="dropdown-divider"></div>
-            <!-- Sign Up Link -->
-            <!-- jQuery on click - will change form action to /register and change button to say Register (or Sign Up). -->
-            <a class="dropdown-item" href="#">New around here? Sign up</a>
+            Sign Up Link
+            jQuery on click - will change form action to /register and change button to say Register (or Sign Up).
+            <a class="dropdown-item" href="#" id="signup-login-toggle">New around here? Sign up</a>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, request, flash, session, g
-from models import db, connect_db, User, Product, Order, OrderProduct
-from forms import LoginSignupForm
+# To add login/signup functionality import User (uncomment in models)
+from models import db, connect_db, Product, Order, OrderProduct
+# from forms import LoginSignupForm
 from sqlalchemy.exc import IntegrityError
 from dotenv import load_dotenv
 from payments import make_payment
@@ -19,30 +20,30 @@ load_dotenv()
 
 connect_db(app)
 
-CURR_USER = 'current user'
+# CURR_USER = 'current user'
 
-@app.before_request
-def add_user_to_g():
-    """If we're logged in, add curr user to Flask global."""
+# @app.before_request
+# def add_user_to_g():
+#     """If we're logged in, add curr user to Flask global."""
 
-    if CURR_USER in session:
-        g.user = User.query.get(session[CURR_USER])
+#     if CURR_USER in session:
+#         g.user = User.query.get(session[CURR_USER])
 
-    else:
-        g.user = None
-
-
-def do_login(user):
-    """Log in user."""
-
-    session[CURR_USER] = user.id
+#     else:
+#         g.user = None
 
 
-def do_logout():
-    """Logout user."""
+# def do_login(user):
+#     """Log in user."""
 
-    if CURR_USER in session:
-        del session[CURR_USER]
+#     session[CURR_USER] = user.id
+
+
+# def do_logout():
+#     """Logout user."""
+
+#     if CURR_USER in session:
+#         del session[CURR_USER]
 
 
 @app.route('/')
@@ -55,46 +56,46 @@ def home():
     return render_template('home.html', products=products, APPLICATION_ID=APPLICATION_ID, LOCATION_ID=LOCATION_ID)
 
 
-@app.route('/login', methods=['POST'])
-def login():
-    '''Handle Login'''
-    req = request.get_json()
+# @app.route('/login', methods=['POST'])
+# def login():
+#     '''Handle Login'''
+#     req = request.get_json()
 
-    form = LoginSignupForm(obj=req, meta={'csrf': False})
-    if request.method == 'POST' and form.validate():
-        user = User.authenticate(form.email.data,
-                                 form.password.data)
+#     form = LoginSignupForm(obj=req, meta={'csrf': False})
+#     if request.method == 'POST' and form.validate():
+#         user = User.authenticate(form.email.data,
+#                                  form.password.data)
 
-        if user:
-            do_login(user)
-            flash(f"Welcome!", "success")
-            return redirect("/")
+#         if user:
+#             do_login(user)
+#             flash(f"Welcome!", "success")
+#             return redirect("/")
 
-        flash("Invalid credentials.", 'danger')
+#         flash("Invalid credentials.", 'danger')
     
-    return redirect('/')
+#     return redirect('/')
 
-@app.route('/register', methods=['POST'])
-def register():
-    '''Handle registering new account.'''
-    req = request.get_json()
+# @app.route('/register', methods=['POST'])
+# def register():
+#     '''Handle registering new account.'''
+#     req = request.get_json()
 
-    form = LoginSignupForm(obj=req, meta={'csrf': False})
-    if request.method == 'POST' and form.validate():
-        try:
-            user = User.signup(
-                email=form.email.data,
-                password=form.password.data
-            )
-            db.session.commit()
+#     form = LoginSignupForm(obj=req, meta={'csrf': False})
+#     if request.method == 'POST' and form.validate():
+#         try:
+#             user = User.signup(
+#                 email=form.email.data,
+#                 password=form.password.data
+#             )
+#             db.session.commit()
 
-        except IntegrityError:
-            flash("Email already taken", 'danger')
-            return render_template('cart.html')
+#         except IntegrityError:
+#             flash("Email already taken", 'danger')
+#             return render_template('cart.html')
 
-        do_login(user)
+#         do_login(user)
 
-        return redirect("/")
+#         return redirect("/")
 
 app.route('/payment', methods=['POST'])
 def payment():

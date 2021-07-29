@@ -11,7 +11,7 @@
       <div class="row row-cols-1 row-cols-md-2 g-4">
 
         {% for product in products %}
-        <div class="col">
+        <div class="col" id="product{{product.id}}div">
           <div class="card product-card mb-3 h-100 
             {% if product.box_qty_on_hand == 0 -%}
               border-danger

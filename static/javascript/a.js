@@ -47,23 +47,23 @@ function addProductToCart(productID, quantity, price) {
   // Create cart item
   let cartItem = $(`
       <div id='item-id${productID}'>
-      <p class='card-text'>${title}</p>
-      <div class="row g-0">
-        <div class="col-md-8">
-          <form class='cart-item-form' id='${productID}'>
-            <div class='input-group input-group-sm mb-4'>
-              <label for='quantity' class='col-sm-3 col-form-label col-form-label-sm hidden'>Qty</label>
-              <input type='number' name='quantity' class='quantity form-control col-sm-4' id='qty-${productID}' max='10' min='0' value='${quantity}'
-                required>
-              <button type='submit' class='btn btn-outline-secondary edit-qty-btn'>Update</button>
-            </div>
-          </form>
+        <p class='card-text'>${title}</p>
+        <div class="row g-0">
+          <div class="col-md-8">
+            <form class='cart-item-form' id='${productID}'>
+              <div class='input-group input-group-sm mb-4'>
+                <label for='quantity' class='col-sm-3 col-form-label col-form-label-sm hidden'>Qty</label>
+                <input type='number' name='quantity' class='quantity form-control col-sm-4' id='qty-${productID}' max='10' min='0' value='${quantity}'
+                  required>
+                <button type='submit' class='btn btn-outline-secondary edit-qty-btn'>Update</button>
+              </div>
+            </form>
+          </div>
+          <div class='col-md-4'>
+            <p class='align-middle'>$<span class='subtotal' id='product${productID}-subtotal'>${subtotal}</span></p>
+          </div>
         </div>
-        <div class='col-md-4'>
-          <p class='align-middle'>$<span class='subtotal' id='product${productID}-subtotal'>${subtotal}</span></p>
-        </div>
-      </div>
-      <hr>
+        <hr>
       </div>
     `)
 

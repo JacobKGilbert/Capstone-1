@@ -5,6 +5,7 @@ from models import db, connect_db, Product, Order, OrderProduct
 from sqlalchemy.exc import IntegrityError
 from dotenv import load_dotenv
 from payments import make_payment
+import json
 
 import os
 
@@ -97,14 +98,28 @@ def home():
 
 #         return redirect("/")
 
-app.route('/payment', methods=['POST'])
+@app.route('/payment', methods=['POST'])
 def payment():
     req = request.get_json()
     token = req['token']
-    amount = req['amount']
+    amount = int(req['amount'])
+    req_products = req['products']
+    products = json.loads(req_products)
+    queried_products = []
 
+    for product in products:
+        found_product = Product.query.filter_by(id=product['ID']).first()
+        queried_products.append(found_product)
+        quantity = int(product['qty'])
+        found_product.box_qty_on_hand -= quantity
+        db.session.add(found_product)
+
+    order = Order(products=queried_products)
+    db.session.add(order)
+    db.session.commit()
 
     make_payment(token, amount)
+    return redirect("/")
 
 
 if __name__ == '__main__':

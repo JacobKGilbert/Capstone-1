@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, flash, session, g
+from flask import Flask, render_template, redirect, request, flash, session, g, url_for
 # To add login/signup functionality import User (uncomment in models)
 from models import db, connect_db, Product, Order, OrderProduct
 # from forms import LoginSignupForm
@@ -118,9 +118,8 @@ def payment():
     db.session.add(order)
     db.session.commit()
 
-    make_payment(token, amount)
-    return redirect("/")
-
+    res = make_payment(token, amount)
+    return res.body
 
 if __name__ == '__main__':
     app.run(ssl_context='adhoc')

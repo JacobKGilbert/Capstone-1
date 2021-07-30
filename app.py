@@ -50,7 +50,7 @@ connect_db(app)
 @app.route('/')
 def home():
     '''Get the home template.'''
-    products = Product.query.all()
+    products = Product.query.order_by(Product.id).all()
     APPLICATION_ID = os.environ.get('APPLICATION_ID')
     LOCATION_ID = os.environ.get('LOCATION_ID')
 

@@ -64,10 +64,10 @@
           if (result.status === 'OK') {
              await axios.post('/payment', {token: `${result.token}`, amount: `${amount}`, products: `${productsJSON}`})
              .then(function (res) {
-               console.log(res)
+                window.location.reload()
              })
              .catch(function (err) {
-               console.log(err)
+                console.log(err)
              })
           }
         } catch (e) {

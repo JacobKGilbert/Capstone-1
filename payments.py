@@ -6,7 +6,7 @@ import uuid
 # Load environment variables from .env file
 load_dotenv()
 
-def make_payment(token, amount, order_id):
+def make_payment(token, amount):
   # Create an instance of the API Client
   # and initialize it with the credentials
   # for the Square account whose assets you want to manage
@@ -27,10 +27,9 @@ def make_payment(token, amount, order_id):
   body['amount_money'] = {}
   body['amount_money']['amount'] = amount
   body['amount_money']['currency'] = 'USD'
-  body['order_id'] = order_id
   body['location_id'] = os.environ.get('LOCATION_ID')
 
-  result = payments_api.create_payments(body)
+  result = payments_api.create_payment(body)
 
   if result.is_success():
     print(result.body)

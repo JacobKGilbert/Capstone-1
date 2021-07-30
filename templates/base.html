@@ -41,12 +41,28 @@
       async function eventHandler(event) {
         event.preventDefault();
 
-        let amount = parseFloat($('#amount-total').text())
+        let amount = parseFloat($('#amount-total').text() + '00')
+        let cartProducts = $('.cart-item-form')
+        let products = []
+
+        for (const product of cartProducts) {
+          let productID = parseInt($(product).attr('id'))
+          let quantity = parseInt($(`#qty-${productID}`).val())
+
+          let productObj = {
+            ID: productID,
+            qty: quantity
+          }
+
+          products.push(productObj)
+        }
+
+        productsJSON = JSON.stringify(products)
 
         try {
           const result = await card.tokenize();
           if (result.status === 'OK') {
-             await axios.post('/payment', {token: `${result.token}`, amount: amount})
+             await axios.post('/payment', {token: `${result.token}`, amount: `${amount}`, products: `${productsJSON}`})
              .then(function (res) {
                console.log(res)
              })

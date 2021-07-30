@@ -30,8 +30,4 @@ def make_payment(token, amount):
   body['location_id'] = os.environ.get('LOCATION_ID')
 
   result = payments_api.create_payment(body)
-
-  if result.is_success():
-    print(result.body)
-  elif result.is_error():
-    print(result.errors)
+  return result

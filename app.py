@@ -129,14 +129,18 @@ def payment():
     products_in_cart = req['products']
     products = json.loads(products_in_cart)
 
+    res = make_payment(token, amount)
+
+    if res.errors:
+        return res.errors
+
     # Collect products from db and update the orders_products table.
     q_products = get_products_from_db(products)
     update_order_products_table(q_products)
     
     db.session.commit()
 
-    res = make_payment(token, amount)
-    return res.body
+    return res.payment
 
 if __name__ == '__main__':
     app.run(ssl_context='adhoc')

@@ -26,6 +26,24 @@ load_dotenv()
 
 connect_db(app)
 
+# Helper Functions
+
+def get_products_from_db(products):
+    res = []
+
+    for product in products:
+        found_product = Product.query.filter_by(id=product['ID']).first()
+        res.append(found_product)
+        quantity = int(product['qty'])
+        found_product.box_qty_on_hand -= quantity
+        db.session.add(found_product)
+    
+    return res
+
+def update_order_products_table(q_products):
+    order = Order(products=q_products)
+    db.session.add(order)
+
 # CURR_USER = 'current user'
 
 # @app.before_request
@@ -108,19 +126,13 @@ def payment():
     req = request.get_json()
     token = req['token']
     amount = int(req['amount'])
-    req_products = req['products']
-    products = json.loads(req_products)
-    queried_products = []
+    products_in_cart = req['products']
+    products = json.loads(products_in_cart)
 
-    for product in products:
-        found_product = Product.query.filter_by(id=product['ID']).first()
-        queried_products.append(found_product)
-        quantity = int(product['qty'])
-        found_product.box_qty_on_hand -= quantity
-        db.session.add(found_product)
-
-    order = Order(products=queried_products)
-    db.session.add(order)
+    # Collect products from db and update the orders_products table.
+    q_products = get_products_from_db(products)
+    update_order_products_table(q_products)
+    
     db.session.commit()
 
     res = make_payment(token, amount)

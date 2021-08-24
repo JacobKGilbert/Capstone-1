@@ -62,13 +62,24 @@
         try {
           const result = await card.tokenize();
           if (result.status === 'OK') {
-             await axios.post('/payment', {token: `${result.token}`, amount: `${amount}`, products: `${productsJSON}`})
-             .then(function (res) {
-                window.location.reload()
-             })
-             .catch(function (err) {
-                console.log(err)
-             })
+            try {
+              res = await axios.post('/payment', { token: `${result.token}`, amount: `${amount}`, products: `${productsJSON}` })
+
+              window.location.reload()
+            } catch (error) {
+              errs = JSON.parse(JSON.stringify(error.response.data))
+              for (const err of errs.errors) {
+                alert(err.detail)
+              }
+            }
+            
+            //  .then(function (res) {
+            //     // window.location.reload()
+            //     console.log(res)
+            //  })
+            //  .catch(function (err) {
+            //     console.log(err)
+            //  })
           }
         } catch (e) {
           console.error(e);

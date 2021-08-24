@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, flash, session, g, url_for, jsonify
+from flask import Flask, render_template, redirect, request, flash, session, g, jsonify, make_response
 # To add login/signup functionality import User (uncomment in models)
 from models import db, connect_db, Product, Order, OrderProduct
 # from forms import LoginSignupForm
@@ -131,8 +131,10 @@ def payment():
 
     res = make_payment(token, amount)
 
-    if res.body['errors']:
-        return jsonify(res.body['errors'])
+    if res.body['payment']['status'] == 'FAILED':
+        resp = make_response(jsonify({'errors': res.body['errors']}), 400)
+
+        return resp
     else:
         # Collect products from db and update the orders_products table.
         q_products = get_products_from_db(products)
@@ -140,7 +142,8 @@ def payment():
 
         db.session.commit()
 
-        return res.body['payment']
+        resp = make_response(res.body['payment'], 200)
+        return resp
 
 if __name__ == '__main__':
     app.run(ssl_context='adhoc')
